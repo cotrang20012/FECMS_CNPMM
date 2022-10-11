@@ -18,6 +18,7 @@ import {
   TableContainer,
   TablePagination,
 } from '@mui/material';
+import AuthModal from '../components/modal/AuthModal';
 // components
 import Page from '../components/Page';
 import Label from '../components/Label';
