@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { Link as RouterLink } from 'react-router-dom';
+// import { Link as RouterLink } from 'react-router-dom';
 // material
 import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText } from '@mui/material';
 import { handleOpenModal } from 'src/redux/modalSlice';
@@ -30,11 +30,17 @@ export default function UserMoreMenu() {
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       >
-        <MenuItem sx={{ color: 'text.secondary' }} onClick={() => console.log('DeleteDelete')}>
+        <MenuItem
+          sx={{ color: 'text.secondary' }}
+          onClick={() => {
+            dispatch(handleOpenModal('Bạn chắc chắn xóa người dùng chứ ?'));
+            setIsOpen(false);
+          }}
+        >
           <ListItemIcon>
             <Iconify icon="eva:trash-2-outline" width={24} height={24} />
           </ListItemIcon>
-          <ListItemText primary="Delete" primaryTypographyProps={{ variant: 'body2' }} />
+          <ListItemText primary="Xóa" primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>
 
         <MenuItem
@@ -42,14 +48,14 @@ export default function UserMoreMenu() {
           to="#"
           sx={{ color: 'text.secondary' }}
           onClick={() => {
-            dispatch(handleOpenModal());
+            dispatch(handleOpenModal('Bạn chắc chắn khóa người dùng chứ ?'));
             setIsOpen(false);
           }}
         >
           <ListItemIcon>
             <Iconify icon="eva:edit-fill" width={24} height={24} />
           </ListItemIcon>
-          <ListItemText primary="Edit" primaryTypographyProps={{ variant: 'body2' }} />
+          <ListItemText primary="Khóa" primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>
       </Menu>
     </>

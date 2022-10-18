@@ -1,13 +1,12 @@
 import PropTypes from 'prop-types';
-import { Link as RouterLink } from 'react-router-dom';
 // material
-import { Box, Card, Link, Typography, Stack } from '@mui/material';
+import { Box, Card, Typography, Stack, IconButton } from '@mui/material';
 import { styled } from '@mui/material/styles';
 // utils
-import { fCurrency } from '../../../utils/formatNumber';
+
 // components
 import Label from '../../../components/Label';
-import { ColorPreview } from '../../../components/color-utils';
+import Iconify from 'src/components/Iconify';
 
 // ----------------------------------------------------------------------
 
@@ -26,7 +25,7 @@ ShopProductCard.propTypes = {
 };
 
 export default function ShopProductCard({ product }) {
-  const { name, cover, price, colors, status, priceSale } = product;
+  const { name, cover, status } = product;
 
   return (
     <Card>
@@ -50,30 +49,31 @@ export default function ShopProductCard({ product }) {
       </Box>
 
       <Stack spacing={2} sx={{ p: 3 }}>
-        <Link to="#" color="inherit" underline="hover" component={RouterLink}>
-          <Typography variant="subtitle2" noWrap>
-            {name}
+        <Stack direction="row" justifyContent="space-between" alignItems="center">
+          <Typography className="" variant="subtitle2" style={nameStoryStyled} noWrap>
+            {/* {name} */}
+            Tên truyện Tên truyệnTên truyệnTên truyệnTên truyệnTên truyệnTên truyện
           </Typography>
-        </Link>
-
+          <IconButton>
+            <Iconify icon="eva:more-horizontal-fill" width={20} height={20} />
+          </IconButton>
+        </Stack>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
-          <ColorPreview colors={colors} />
-          <Typography variant="subtitle1">
-            <Typography
-              component="span"
-              variant="body1"
-              sx={{
-                color: 'text.disabled',
-                textDecoration: 'line-through',
-              }}
-            >
-              {priceSale && fCurrency(priceSale)}
-            </Typography>
-            &nbsp;
-            {fCurrency(price)}
-          </Typography>
+          {/* <ColorPreview colors={colors} /> */}
+
+          <Typography variant="subtitle1">Tên tác giả</Typography>
+          <Typography variant="subtitle1">Tên thể loại</Typography>
         </Stack>
       </Stack>
     </Card>
   );
 }
+
+const nameStoryStyled = {
+  'white-space': 'nowrap',
+  '-webkit-line-clamp': '1',
+  '-webkit-box-orient': 'vertical',
+  overflow: 'hidden',
+  '-o-text-overflow': 'ellipsis',
+  'text-overflow': 'ellipsis',
+};

@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, InputLabel, MenuItem, Modal, Select, Stack } from '@mui/material';
+import { Box, Button, FormControl, InputLabel, MenuItem, Modal, Select, Stack, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { handleCloseModal } from 'src/redux/modalSlice';
@@ -29,42 +29,29 @@ const fakeData = [
   },
 ];
 const AuthModal = () => {
-  const [age, setAge] = React.useState('');
-  const isModalOpen = useSelector((state) => state.modal.isModalOpen);
+  const { isModalOpen, content } = useSelector((state) => state.modal);
 
   const dispatch = useDispatch();
-  const handleChange = (event) => {
-    setAge(event.target.value);
+
+  const closeModal = () => {
+    dispatch(handleCloseModal());
   };
   return ReactDOM.createPortal(
     <Modal
       open={isModalOpen}
-      onClose={() => {
-        dispatch(handleCloseModal());
-      }}
+      onClose={closeModal}
       aria-labelledby="child-modal-title"
       aria-describedby="child-modal-description"
     >
       <Stack sx={{ ...style }} direction={'column'} rowGap={'1rem'}>
         <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">Phân quyền</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={age}
-            label="Phân quyền"
-            onChange={handleChange}
-          >
-            {fakeData.map((item) => (
-              <MenuItem value={item.id}>{item.name}</MenuItem>
-            ))}
-          </Select>
+          <Typography variant="h5">{content}</Typography>
         </FormControl>
         <Stack direction={'row'} justifyContent={'space-between'}>
           <Button variant="outlined" color="primary">
-            Thay đổi
+            Đồng ý
           </Button>
-          <Button variant="outlined" color="error">
+          <Button variant="outlined" color="error" onClick={closeModal}>
             Hủy bỏ
           </Button>
         </Stack>
