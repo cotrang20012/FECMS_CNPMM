@@ -17,12 +17,40 @@ import {
   AppCurrentSubject,
   AppConversionRates,
 } from '../sections/@dashboard/app';
+import { useEffect } from 'react';
+import novelApi from 'src/apis/novelsApi';
+import userApi from 'src/apis/userApi';
+import { useDispatch, useSelector } from 'react-redux';
+import { countChapter, countNovel } from 'src/redux/novelSlice';
+import { countUser } from 'src/redux/userSlice';
 
 // ----------------------------------------------------------------------
 
 export default function DashboardApp() {
   const theme = useTheme();
+  const { chapterNumber, novelNumber } = useSelector((state) => state.novel);
+  const { userNumber } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const handleCountNovels = async () => {
+      const resp = await novelApi.getCountNovel();
 
+      dispatch(countNovel(resp.data.novelNumber));
+    };
+    const handleCountChapters = async () => {
+      const resp = await novelApi.getCountChapter();
+      dispatch(countChapter(resp.data.chapterNumber));
+    };
+    const countAccounts = async () => {
+      const resp = await userApi.getCountAccount();
+      dispatch(countUser(resp.data.accountNumber));
+      // setCount({ ...count, user: resp.data.accountNumber });
+    };
+    countAccounts();
+    handleCountChapters();
+    handleCountNovels();
+    // console.log('hello world');/
+  }, []);
   return (
     <Page title="Dashboard">
       <Container maxWidth="xl">
@@ -32,15 +60,15 @@ export default function DashboardApp() {
 
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Số người dùng" total={700} icon={'bxs:user'} />
+            <AppWidgetSummary title="Số người dùng" total={userNumber} icon={'bxs:user'} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Tổng chương" total={1000} color="info" icon={'bi:book-half'} />
+            <AppWidgetSummary title="Tổng chương" total={chapterNumber} color="info" icon={'bi:book-half'} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Tổng truyện" total={1000} color="warning" icon={'bxs:book-alt'} />
+            <AppWidgetSummary title="Tổng truyện" total={novelNumber} color="warning" icon={'bxs:book-alt'} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
