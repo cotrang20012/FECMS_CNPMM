@@ -5,13 +5,26 @@ import { Container, Stack, Typography } from '@mui/material';
 import Page from '../components/Page';
 import { ProductSort, ProductList, ProductCartWidget, ProductFilterSidebar } from '../sections/@dashboard/products';
 // mock
-import PRODUCTS from '../_mock/products';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import novelApi from 'src/apis/novelsApi';
+import { getNovels } from 'src/redux/novelSlice';
 
 // ----------------------------------------------------------------------
 
 export default function EcommerceShop() {
   const [openFilter, setOpenFilter] = useState(false);
-
+  const { novels } = useSelector((state) => state.novel);
+  const novelList = novels.map((novel) => ({
+    id: novel?._id,
+    author: novel?.author,
+    genre: novel?.type,
+    name: novel?.name,
+    image: novel?.image,
+    status: novel?.state,
+  }));
+  console.log('🚀 ~ novelList ~ novelList', novelList);
+  const dispatch = useDispatch();
   const handleOpenFilter = () => {
     setOpenFilter(true);
   };
@@ -19,6 +32,14 @@ export default function EcommerceShop() {
   const handleCloseFilter = () => {
     setOpenFilter(false);
   };
+  useEffect(() => {
+    const handleGetNovels = async () => {
+      const resp = await novelApi.getNovels();
+      console.log('🚀 ~ handleGetNovels ~ resp', resp?.data);
+      dispatch(getNovels(resp?.data));
+    };
+    handleGetNovels();
+  }, [dispatch]);
 
   return (
     <Page title="Dashboard: Products">
@@ -38,7 +59,7 @@ export default function EcommerceShop() {
           </Stack>
         </Stack>
 
-        <ProductList products={PRODUCTS} />
+        <ProductList products={novelList} />
         <ProductCartWidget />
       </Container>
     </Page>
