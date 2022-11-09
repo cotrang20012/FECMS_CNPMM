@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   chapterNumber: 0,
   novelNumber: 0,
+  novels: [],
 };
 const novelSlice = createSlice({
   name: 'novel',
@@ -17,8 +18,12 @@ const novelSlice = createSlice({
       ...state,
       novelNumber: action.payload,
     }),
+    getNovels: (state, action) => ({
+      ...state,
+      novels: action.payload,
+    }),
   },
 });
-export const { countChapter, countNovel } = novelSlice.actions;
+export const { countChapter, countNovel, getNovels } = novelSlice.actions;
 
 export default novelSlice.reducer;
