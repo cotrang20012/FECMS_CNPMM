@@ -25,7 +25,8 @@ ShopProductCard.propTypes = {
 };
 
 export default function ShopProductCard({ product }) {
-  const { name, cover, status } = product;
+  // const { name, cover, status } = product;
+  const { id, author, genre, name, image, status } = product;
 
   return (
     <Card>
@@ -45,14 +46,13 @@ export default function ShopProductCard({ product }) {
             {status}
           </Label>
         )}
-        <ProductImgStyle alt={name} src={cover} />
+        <ProductImgStyle alt={name} src={image} />
       </Box>
 
       <Stack spacing={2} sx={{ p: 3 }}>
         <Stack direction="row" justifyContent="space-between" alignItems="center">
           <Typography className="" variant="subtitle2" style={nameStoryStyled} noWrap>
-            {/* {name} */}
-            Tên truyện Tên truyệnTên truyệnTên truyệnTên truyệnTên truyệnTên truyện
+            {name}
           </Typography>
           <IconButton>
             <Iconify icon="eva:more-horizontal-fill" width={20} height={20} />
@@ -61,8 +61,8 @@ export default function ShopProductCard({ product }) {
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           {/* <ColorPreview colors={colors} /> */}
 
-          <Typography variant="subtitle1">Tên tác giả</Typography>
-          <Typography variant="subtitle1">Tên thể loại</Typography>
+          <Typography variant="subtitle1">{author}</Typography>
+          <Typography variant="subtitle1">{genre}</Typography>
         </Stack>
       </Stack>
     </Card>
@@ -70,10 +70,10 @@ export default function ShopProductCard({ product }) {
 }
 
 const nameStoryStyled = {
-  'white-space': 'nowrap',
-  '-webkit-line-clamp': '1',
-  '-webkit-box-orient': 'vertical',
+  whiteSpace: 'nowrap',
+  WebkitLineClamp: '1',
+  WebkitBoxOrient: 'vertical',
   overflow: 'hidden',
-  '-o-text-overflow': 'ellipsis',
-  'text-overflow': 'ellipsis',
+  OTextOverflow: 'ellipsis',
+  textOverflow: 'ellipsis',
 };
