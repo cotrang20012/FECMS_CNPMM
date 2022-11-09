@@ -1,8 +1,18 @@
-import { Box, Button, FormControl, InputLabel, MenuItem, Modal, Select, Stack, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import { Button, FormControl, Modal, Stack, Typography } from '@mui/material';
 import ReactDOM from 'react-dom';
-import { handleCloseModal } from 'src/redux/modalSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import { handleCloseModal } from 'src/redux/modalSlice';
+
+// const fakeData = [
+//   {
+//     id: 1,
+//     name: 'User',
+//   },
+//   {
+//     id: 2,
+//     name: 'Admin',
+//   },
+// ];
 const style = {
   position: 'absolute',
   top: '50%',
@@ -17,22 +27,9 @@ const style = {
   padding: '2rem',
   borderRadius: '2rem',
 };
-
-const fakeData = [
-  {
-    id: 1,
-    name: 'User',
-  },
-  {
-    id: 2,
-    name: 'Admin',
-  },
-];
-const AuthModal = () => {
-  const { isModalOpen, content } = useSelector((state) => state.modal);
-
+const ModalProvider = ({ id, content, handleClickAccept }) => {
+  const { isModalOpen } = useSelector((state) => state.modal);
   const dispatch = useDispatch();
-
   const closeModal = () => {
     dispatch(handleCloseModal());
   };
@@ -48,7 +45,14 @@ const AuthModal = () => {
           <Typography variant="h5">{content}</Typography>
         </FormControl>
         <Stack direction={'row'} justifyContent={'space-between'}>
-          <Button variant="outlined" color="primary">
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={() => {
+              handleClickAccept(id);
+              closeModal();
+            }}
+          >
             Đồng ý
           </Button>
           <Button variant="outlined" color="error" onClick={closeModal}>
@@ -61,4 +65,4 @@ const AuthModal = () => {
   );
 };
 
-export default AuthModal;
+export default ModalProvider;
