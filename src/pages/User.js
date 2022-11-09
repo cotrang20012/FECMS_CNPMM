@@ -1,5 +1,4 @@
 import { filter } from 'lodash';
-import { sentenceCase } from 'change-case';
 import { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 // material
@@ -18,25 +17,29 @@ import {
   TableContainer,
   TablePagination,
 } from '@mui/material';
-import AuthModal from '../components/modal/AuthModal';
 // components
 import Page from '../components/Page';
-import Label from '../components/Label';
 import Scrollbar from '../components/Scrollbar';
 import Iconify from '../components/Iconify';
 import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
 // mock
-import USERLIST from '../_mock/user';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUsers } from 'src/redux/userSlice';
+import userApi from 'src/apis/userApi';
+import ModalContent from 'src/components/modal/ModalContent';
+import { handleCloseModal } from 'src/redux/modalSlice';
+import ModalProvider from 'src/components/modal/ModalProvider';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Name', alignRight: false },
-  { id: 'company', label: 'Company', alignRight: false },
-  { id: 'role', label: 'Role', alignRight: false },
-  { id: 'isVerified', label: 'Verified', alignRight: false },
-  { id: 'status', label: 'Status', alignRight: false },
+  { id: 'name', label: 'Tên', alignRight: false },
+  { id: 'username', label: 'Tên đăng nhập', alignRight: false },
+  { id: 'email', label: 'Email', alignRight: false },
+  { id: 'balance', label: 'Số dư', alignRight: false },
+  { id: 'status', label: 'Trạng thái', alignRight: false },
   { id: '' },
 ];
 
@@ -84,7 +87,20 @@ export default function User() {
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  console.log(USERLIST);
+  const { users } = useSelector((state) => state.user);
+  console.log("🚀 ~ User ~ users", users)
+  const { type: modalType } = useSelector((state) => state.modal);
+  const dispatch = useDispatch();
+
+  const userList = users.map((user) => ({
+    id: user?._id,
+    name: user?.nickname,
+    username: user?.username,
+    avatar: user?.image,
+    email: user?.email,
+    balance: user?.balance,
+    status: user?.active,
+  }));
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -94,7 +110,7 @@ export default function User() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = USERLIST.map((n) => n.name);
+      const newSelecteds = userList.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -129,12 +145,29 @@ export default function User() {
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - userList.length) : 0;
 
-  const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(userList, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredUsers.length === 0;
 
+  useEffect(() => {
+    const handleGetUsers = async () => {
+      const resp = await userApi.getUsers();
+      dispatch(getUsers(resp?.data));
+    };
+    handleGetUsers();
+  }, [dispatch]);
+  const handleDeleteUser = async (id) => {
+    try {
+      await userApi.deleteUsers(id);
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+  const handleBlockUser = async (id) => {
+    console.log('🚀 ~ handleBlockUser ~ id', id);
+  };
   return (
     <Page title="User">
       <Container>
@@ -157,14 +190,14 @@ export default function User() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={USERLIST.length}
+                  rowCount={userList.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, role, status, company, avatarUrl, isVerified } = row;
+                  {filteredUsers?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                    const { id, name, status, balance, avatar, email, username } = row;
                     const isItemSelected = selected.indexOf(name) !== -1;
 
                     return (
@@ -181,24 +214,37 @@ export default function User() {
                         </TableCell>
                         <TableCell component="th" scope="row" padding="none">
                           <Stack direction="row" alignItems="center" spacing={2}>
-                            <Avatar alt={name} src={avatarUrl} />
+                            <Avatar alt={name} src={avatar} />
                             <Typography variant="subtitle2" noWrap>
                               {name}
                             </Typography>
                           </Stack>
                         </TableCell>
-                        <TableCell align="left">{company}</TableCell>
-                        <TableCell align="left">{role}</TableCell>
-                        <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
-                        <TableCell align="left">
-                          <Label variant="ghost" color={(status === 'banned' && 'error') || 'success'}>
-                            {sentenceCase(status)}
-                          </Label>
-                        </TableCell>
+                        <TableCell align="left">{username}</TableCell>
+                        <TableCell align="left">{email}</TableCell>
+                        <TableCell align="left">{balance}</TableCell>
+                        <TableCell align="left">{status === false ? 'Banned' : 'Active'}</TableCell>
 
                         <TableCell align="right">
                           <UserMoreMenu />
                         </TableCell>
+                        {modalType === 'deleteuser' && (
+                          <ModalProvider
+                            className="deleteuser Modal"
+                            id={id}
+                            content={`Bạn có chắc là xóa người dùng ${id} này không ?`}
+                            closeModal={() => dispatch(handleCloseModal())}
+                            handleClickAccept={() => handleDeleteUser(id)}
+                          ></ModalProvider>
+                        )}
+                        {modalType === 'blockuser' && (
+                          <ModalProvider
+                            className="block Modal"
+                            id={id}
+                            content={`Bạn có chắc là khóa người dùng ${id} này không ?`}
+                            handleClickAccept={() => handleBlockUser(id)}
+                          ></ModalProvider>
+                        )}
                       </TableRow>
                     );
                   })}
@@ -225,7 +271,7 @@ export default function User() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={USERLIST.length}
+            count={userList.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
