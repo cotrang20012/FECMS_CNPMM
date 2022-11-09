@@ -28,7 +28,6 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUsers } from 'src/redux/userSlice';
 import userApi from 'src/apis/userApi';
-import ModalContent from 'src/components/modal/ModalContent';
 import { handleCloseModal } from 'src/redux/modalSlice';
 import ModalProvider from 'src/components/modal/ModalProvider';
 
@@ -88,7 +87,6 @@ export default function User() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const { users } = useSelector((state) => state.user);
-  console.log("🚀 ~ User ~ users", users)
   const { type: modalType } = useSelector((state) => state.modal);
   const dispatch = useDispatch();
 
