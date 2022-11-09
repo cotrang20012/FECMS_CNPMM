@@ -10,7 +10,7 @@ import Iconify from '../../../components/Iconify';
 
 // ----------------------------------------------------------------------
 
-export default function UserMoreMenu() {
+export default function UserMoreMenu({ more }) {
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
@@ -33,7 +33,7 @@ export default function UserMoreMenu() {
         <MenuItem
           sx={{ color: 'text.secondary' }}
           onClick={() => {
-            dispatch(handleOpenModal('Bạn chắc chắn xóa người dùng chứ ?'));
+            dispatch(handleOpenModal({ type: 'deleteuser' }));
             setIsOpen(false);
           }}
         >
@@ -48,7 +48,7 @@ export default function UserMoreMenu() {
           to="#"
           sx={{ color: 'text.secondary' }}
           onClick={() => {
-            dispatch(handleOpenModal('Bạn chắc chắn khóa người dùng chứ ?'));
+            dispatch(handleOpenModal({ type: 'blockuser' }));
             setIsOpen(false);
           }}
         >
