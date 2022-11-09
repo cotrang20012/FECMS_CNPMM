@@ -22,14 +22,14 @@ import novelApi from 'src/apis/novelsApi';
 import userApi from 'src/apis/userApi';
 import { useDispatch, useSelector } from 'react-redux';
 import { countChapter, countNovel } from 'src/redux/novelSlice';
-import { countUser } from 'src/redux/userSlice';
+import { countUser, deleteUser } from 'src/redux/userSlice';
 
 // ----------------------------------------------------------------------
 
 export default function DashboardApp() {
   const theme = useTheme();
   const { chapterNumber, novelNumber } = useSelector((state) => state.novel);
-  const { userNumber } = useSelector((state) => state.user);
+  const { userNumber, users } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   useEffect(() => {
     const handleCountNovels = async () => {
@@ -46,6 +46,12 @@ export default function DashboardApp() {
       dispatch(countUser(resp.data.accountNumber));
       // setCount({ ...count, user: resp.data.accountNumber });
     };
+    const getUser = async () => {
+      const resp = await userApi.getUsers();
+      console.log('🚀 ~ getUser ~ resp', resp.data);
+      // dispatch(deleteUser(1));
+    };
+    getUser();
     countAccounts();
     handleCountChapters();
     handleCountNovels();
