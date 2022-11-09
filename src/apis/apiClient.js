@@ -1,5 +1,4 @@
 import axios from 'axios';
-import queryString from 'query-string';
 import { parse, stringify } from 'qs';
 export const BASE_URL = 'https://becnpmm.vercel.app/api';
 

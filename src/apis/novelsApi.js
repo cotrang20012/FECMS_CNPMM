@@ -9,6 +9,10 @@ class NovelApi {
     const url = `/statistic/countNovels`;
     return axiosClient.get(url);
   };
+  deleteNovels = (novelId) => {
+    const url = `/admin/novel/deletenovel`;
+    return axiosClient.post(url, { novelId });
+  };
 }
 
 const novelApi = new NovelApi();
