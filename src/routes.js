@@ -13,7 +13,7 @@ import DashboardApp from './pages/DashboardApp';
 import Bill from './pages/Bill';
 
 // ----------------------------------------------------------------------
-
+const token = localStorage.getItem('accessToken');
 export default function Router() {
   return useRoutes([
     {
