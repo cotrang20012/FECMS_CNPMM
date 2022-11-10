@@ -28,7 +28,6 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUsers } from 'src/redux/userSlice';
 import userApi from 'src/apis/userApi';
-import ModalContent from 'src/components/modal/ModalContent';
 import { handleCloseModal } from 'src/redux/modalSlice';
 import ModalProvider from 'src/components/modal/ModalProvider';
 
@@ -88,8 +87,8 @@ export default function User() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const { users } = useSelector((state) => state.user);
-  console.log("🚀 ~ User ~ users", users)
-  const { type: modalType } = useSelector((state) => state.modal);
+  console.log('🚀 ~ User ~ users', users);
+  const { type: modalType, id: idUser } = useSelector((state) => state.modal);
   const dispatch = useDispatch();
 
   const userList = users.map((user) => ({
@@ -198,6 +197,8 @@ export default function User() {
                 <TableBody>
                   {filteredUsers?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
                     const { id, name, status, balance, avatar, email, username } = row;
+                    console.log('🚀 ~ {filteredUsers?.slice ~ id', id);
+
                     const isItemSelected = selected.indexOf(name) !== -1;
 
                     return (
@@ -226,23 +227,23 @@ export default function User() {
                         <TableCell align="left">{status === false ? 'Banned' : 'Active'}</TableCell>
 
                         <TableCell align="right">
-                          <UserMoreMenu />
+                          <UserMoreMenu id={id} />
                         </TableCell>
                         {modalType === 'deleteuser' && (
                           <ModalProvider
                             className="deleteuser Modal"
-                            id={id}
-                            content={`Bạn có chắc là xóa người dùng ${id} này không ?`}
+                            id={idUser}
+                            content={`Bạn có chắc là xóa người dùng ${idUser} này không ?`}
                             closeModal={() => dispatch(handleCloseModal())}
-                            handleClickAccept={() => handleDeleteUser(id)}
+                            handleClickAccept={() => handleDeleteUser(idUser)}
                           ></ModalProvider>
                         )}
                         {modalType === 'blockuser' && (
                           <ModalProvider
                             className="block Modal"
-                            id={id}
-                            content={`Bạn có chắc là khóa người dùng ${id} này không ?`}
-                            handleClickAccept={() => handleBlockUser(id)}
+                            id={idUser}
+                            content={`Bạn có chắc là khóa người dùng ${idUser} này không ?`}
+                            handleClickAccept={() => handleBlockUser(idUser)}
                           ></ModalProvider>
                         )}
                       </TableRow>
