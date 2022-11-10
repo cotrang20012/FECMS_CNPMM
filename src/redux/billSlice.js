@@ -3,12 +3,12 @@ import { createSlice } from '@reduxjs/toolkit';
 const billSlice = createSlice({
   name: 'bill',
   initialState: {
-    bill: [],
+    bills: [],
   },
   reducers: {
     getBills: (state, action) => ({
       ...state,
-      bill: action.payload,
+      bills: action.payload,
     }),
   },
 });
