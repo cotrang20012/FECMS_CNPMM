@@ -23,6 +23,8 @@ import userApi from 'src/apis/userApi';
 import { useDispatch, useSelector } from 'react-redux';
 import { countChapter, countNovel } from 'src/redux/novelSlice';
 import { countUser, deleteUser } from 'src/redux/userSlice';
+import { getBills } from 'src/redux/billSlice';
+import billApi from 'src/apis/billApi';
 
 // ----------------------------------------------------------------------
 
@@ -46,16 +48,15 @@ export default function DashboardApp() {
       dispatch(countUser(resp.data.accountNumber));
       // setCount({ ...count, user: resp.data.accountNumber });
     };
-    const getUser = async () => {
-      const resp = await userApi.getUsers();
-      console.log('🚀 ~ getUser ~ resp', resp.data);
-      // dispatch(deleteUser(1));
+    const handleGetBills = async () => {
+      const resp = await billApi.getBills();
+      console.log('🚀 ~ handleGetBills ~ resp', resp?.data);
+      dispatch(getBills(resp?.data));
     };
-    getUser();
+    handleGetBills();
     countAccounts();
     handleCountChapters();
     handleCountNovels();
-    // console.log('hello world');/
   }, []);
   return (
     <Page title="Dashboard">
