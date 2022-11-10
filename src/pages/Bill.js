@@ -158,7 +158,6 @@ export default function Bill() {
 
   return (
     <Page title="User">
-      <div>Hello</div>
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
