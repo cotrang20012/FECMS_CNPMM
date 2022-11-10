@@ -87,8 +87,10 @@ export default function User() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const { users } = useSelector((state) => state.user);
+
   console.log('🚀 ~ User ~ users', users);
   const { type: modalType, id: idUser } = useSelector((state) => state.modal);
+
   const dispatch = useDispatch();
 
   const userList = users.map((user) => ({
