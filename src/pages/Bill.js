@@ -65,7 +65,7 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(array, (_bill) => _bill.username.toLowerCase().indexOf(query.toLowerCase()) !== -1);
   }
   return stabilizedThis.map((el) => el[0]);
 }
@@ -85,7 +85,6 @@ export default function Bill() {
 
   // get bills from state to show
   const { bills } = useSelector((state) => state.bill);
-  console.log('🚀 ~ Bill ~ bills', bills);
   const dispatch = useDispatch();
   //   Declare Bill List to Render
   const billList = bills.map((bill) => ({
