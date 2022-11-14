@@ -1,32 +1,31 @@
 import { faker } from '@faker-js/faker';
 // @mui
+import { Container, Grid, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import { Grid, Container, Typography } from '@mui/material';
 // components
-import Page from '../components/Page';
 import Iconify from '../components/Iconify';
+import Page from '../components/Page';
 // sections
-import {
-  AppTasks,
-  AppNewsUpdate,
-  AppOrderTimeline,
-  AppCurrentVisits,
-  AppWebsiteVisits,
-  AppTrafficBySite,
-  AppWidgetSummary,
-  AppCurrentSubject,
-  AppConversionRates,
-} from '../sections/@dashboard/app';
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import billApi from 'src/apis/billApi';
 import novelApi from 'src/apis/novelsApi';
 import userApi from 'src/apis/userApi';
-import { useDispatch, useSelector } from 'react-redux';
-import { countChapter, countNovel } from 'src/redux/novelSlice';
-import { countUser, deleteUser } from 'src/redux/userSlice';
 import { getBills } from 'src/redux/billSlice';
-import billApi from 'src/apis/billApi';
-import { useNavigate } from 'react-router-dom';
-import jwt_decode from 'jwt-decode';
+import { countChapter, countNovel } from 'src/redux/novelSlice';
+import { countUser } from 'src/redux/userSlice';
+import {
+  AppConversionRates,
+  AppCurrentSubject,
+  AppCurrentVisits,
+  AppNewsUpdate,
+  AppOrderTimeline,
+  AppTasks,
+  AppTrafficBySite,
+  AppWebsiteVisits,
+  AppWidgetSummary,
+} from '../sections/@dashboard/app';
 // ----------------------------------------------------------------------
 
 export default function DashboardApp() {
@@ -74,7 +73,7 @@ export default function DashboardApp() {
     <Page title="Dashboard">
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 5 }}>
-          Hi, Welcome back
+          😍😚 Chào mừng admin trở lại 😎🤩
         </Typography>
 
         <Grid container spacing={3}>
@@ -94,7 +93,7 @@ export default function DashboardApp() {
             <AppWidgetSummary title="Tổng doanh thu" total={totalRevenue} color="success" icon={'jam:coin-f'} />
           </Grid>
 
-          <Grid item xs={12} md={6} lg={8}>
+          {/* <Grid item xs={12} md={6} lg={8}>
             <AppWebsiteVisits
               title="Website Visits"
               subheader="(+43%) than last year"
@@ -254,7 +253,7 @@ export default function DashboardApp() {
                 { id: '5', label: 'Sprint Showcase' },
               ]}
             />
-          </Grid>
+          </Grid> */}
         </Grid>
       </Container>
     </Page>

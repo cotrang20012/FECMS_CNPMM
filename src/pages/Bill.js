@@ -29,7 +29,7 @@ import { getBills } from 'src/redux/billSlice';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'userId', label: 'User ID', alignRight: false },
+  { id: 'username', label: 'Tài khoản', alignRight: false },
   { id: 'amount', label: 'Số tiền', alignRight: false },
   { id: 'method', label: 'Phương thức thanh toán', alignRight: false },
   { id: 'description', label: 'Mô tả', alignRight: false },
@@ -164,7 +164,7 @@ export default function Bill() {
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Bill thanh toán
+            Bill
           </Typography>
           {/* <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="eva:plus-fill" />}>
             New User

@@ -51,7 +51,7 @@ export default function EcommerceShop() {
     <Page title="Novels">
       <Container>
         <Typography variant="h4" sx={{ mb: 5 }}>
-          Products
+          Novels
         </Typography>
 
         <ProductList products={novelList} />
