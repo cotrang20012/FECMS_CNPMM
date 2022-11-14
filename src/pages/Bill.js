@@ -37,7 +37,6 @@ const TABLE_HEAD = [
   { id: 'method', label: 'Phương thức thanh toán', alignRight: false },
   { id: 'description', label: 'Mô tả', alignRight: false },
   { id: 'status', label: 'Trạng thái', alignRight: false },
-  { id: '' },
 ];
 
 // ----------------------------------------------------------------------
@@ -87,12 +86,12 @@ export default function Bill() {
   // get bills from state to show
   const { bills } = useSelector((state) => state.bill);
   console.log('🚀 ~ Bill ~ bills', bills);
-  //   const { type: modalType } = useSelector((state) => state.modal);
   const dispatch = useDispatch();
   //   Declare Bill List to Render
   const billList = bills.map((bill) => ({
     id: bill?._id,
-    userId: bill?.userId,
+    userId: bill?.userId?.id,
+    username: bill?.userId?.username,
     amount: bill?.amount,
     method: bill?.method,
     status: bill?.status,
@@ -157,15 +156,15 @@ export default function Bill() {
   }, []);
 
   return (
-    <Page title="User">
+    <Page title="Bill">
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            User
+            Bill thanh toán
           </Typography>
-          <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="eva:plus-fill" />}>
+          {/* <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="eva:plus-fill" />}>
             New User
-          </Button>
+          </Button> */}
         </Stack>
 
         <Card>
@@ -185,7 +184,7 @@ export default function Bill() {
                 />
                 <TableBody>
                   {filteredBills?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, userId, amount, method, status, description } = row;
+                    const { id, userId, username, amount, method, status, description } = row;
 
                     const isItemSelected = selected.indexOf(userId) !== -1;
 
@@ -199,18 +198,14 @@ export default function Bill() {
                         aria-checked={isItemSelected}
                       >
                         <TableCell padding="checkbox">
-                          <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, userId)} />
+                          <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, username)} />
                         </TableCell>
 
-                        <TableCell align="left">{userId}</TableCell>
+                        <TableCell align="left">{username}</TableCell>
                         <TableCell align="left">{amount}</TableCell>
                         <TableCell align="left">{method}</TableCell>
                         <TableCell align="left">{description}</TableCell>
                         <TableCell align="left">{status}</TableCell>
-
-                        <TableCell align="right">
-                          <div>Không có gì</div>
-                        </TableCell>
                       </TableRow>
                     );
                   })}

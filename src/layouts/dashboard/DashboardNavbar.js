@@ -9,6 +9,10 @@ import Searchbar from './Searchbar';
 import AccountPopover from './AccountPopover';
 import LanguagePopover from './LanguagePopover';
 import NotificationsPopover from './NotificationsPopover';
+import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import authApi from 'src/apis/authApi';
+import userApi from 'src/apis/userApi';
 
 // ----------------------------------------------------------------------
 

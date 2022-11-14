@@ -22,3 +22,6 @@ export function fShortenNumber(number) {
 export function fData(number) {
   return numeral(number).format('0.0 b');
 }
+export function fVietNamCurrency(number) {
+  return new Intl.NumberFormat('vi', { style: 'currency', currency: 'VND' }).format(number);
+}

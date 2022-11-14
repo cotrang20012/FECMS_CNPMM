@@ -5,6 +5,10 @@ class AuthApi {
     const url = `/auth/loginadmin`;
     return axiosClient.post(url, { username, password });
   };
+  refreshToken = (refreshToken) => {
+    const url = '/auth/refreshtoken';
+    return axiosClient.post(url, { refreshToken });
+  };
 }
 
 const authApi = new AuthApi();

@@ -13,7 +13,6 @@ import DashboardApp from './pages/DashboardApp';
 import Bill from './pages/Bill';
 
 // ----------------------------------------------------------------------
-const token = localStorage.getItem('accessToken');
 export default function Router() {
   return useRoutes([
     {
@@ -24,7 +23,6 @@ export default function Router() {
         { path: 'user', element: <User /> },
         { path: 'bill', element: <Bill /> },
         { path: 'products', element: <Products /> },
-        { path: 'blog', element: <Blog /> },
       ],
     },
     {

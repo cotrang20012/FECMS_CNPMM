@@ -23,7 +23,6 @@ export default function EcommerceShop() {
     image: novel?.image,
     status: novel?.state,
   }));
-  console.log('🚀 ~ novelList ~ novelList', novelList);
   const dispatch = useDispatch();
   const handleOpenFilter = () => {
     setOpenFilter(true);
@@ -35,7 +34,6 @@ export default function EcommerceShop() {
   useEffect(() => {
     const handleGetNovels = async () => {
       const resp = await novelApi.getNovels();
-      console.log('🚀 ~ handleGetNovels ~ resp', resp?.data);
       dispatch(getNovels(resp?.data));
     };
     handleGetNovels();

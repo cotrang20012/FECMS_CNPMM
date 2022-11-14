@@ -17,7 +17,7 @@ import {
   AppCurrentSubject,
   AppConversionRates,
 } from '../sections/@dashboard/app';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import novelApi from 'src/apis/novelsApi';
 import userApi from 'src/apis/userApi';
 import { useDispatch, useSelector } from 'react-redux';
@@ -25,34 +25,46 @@ import { countChapter, countNovel } from 'src/redux/novelSlice';
 import { countUser, deleteUser } from 'src/redux/userSlice';
 import { getBills } from 'src/redux/billSlice';
 import billApi from 'src/apis/billApi';
-
+import { useNavigate } from 'react-router-dom';
+import jwt_decode from 'jwt-decode';
 // ----------------------------------------------------------------------
 
 export default function DashboardApp() {
   const theme = useTheme();
+  const [totalRevenue, setToalRevenue] = useState(0);
   const { chapterNumber, novelNumber } = useSelector((state) => state.novel);
   const { userNumber, users } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const naviagate = useNavigate();
+  const accessToken = localStorage.getItem('accessToken');
   useEffect(() => {
+    if (!accessToken) {
+      naviagate('/login');
+    }
     const handleCountNovels = async () => {
       const resp = await novelApi.getCountNovel();
 
-      dispatch(countNovel(resp.data.novelNumber));
+      dispatch(countNovel(resp?.data.novelNumber));
     };
     const handleCountChapters = async () => {
       const resp = await novelApi.getCountChapter();
-      dispatch(countChapter(resp.data.chapterNumber));
+      dispatch(countChapter(resp?.data.chapterNumber));
     };
     const countAccounts = async () => {
       const resp = await userApi.getCountAccount();
-      dispatch(countUser(resp.data.accountNumber));
+      dispatch(countUser(resp?.data.accountNumber));
       // setCount({ ...count, user: resp.data.accountNumber });
     };
     const handleGetBills = async () => {
       const resp = await billApi.getBills();
-      console.log('🚀 ~ handleGetBills ~ resp', resp?.data);
       dispatch(getBills(resp?.data));
     };
+    const handleGetRevenue = async () => {
+      const resp = await billApi.getTotalRevenue();
+      const total = resp?.data?.totalRevenue;
+      setToalRevenue(total);
+    };
+    handleGetRevenue();
     handleGetBills();
     countAccounts();
     handleCountChapters();
@@ -79,7 +91,7 @@ export default function DashboardApp() {
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Tổng doanh thu" total={100} color="success" icon={'jam:coin-f'} />
+            <AppWidgetSummary title="Tổng doanh thu" total={totalRevenue} color="success" icon={'jam:coin-f'} />
           </Grid>
 
           <Grid item xs={12} md={6} lg={8}>

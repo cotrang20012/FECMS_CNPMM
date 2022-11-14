@@ -11,11 +11,13 @@ import { LoadingButton } from '@mui/lab';
 import Iconify from '../../../components/Iconify';
 import { FormProvider, RHFTextField, RHFCheckbox } from '../../../components/hook-form';
 import { handleLogin } from '../../../feature/auth';
+import { useDispatch } from 'react-redux';
+import { setAdmin } from 'src/redux/authSlice';
 // ----------------------------------------------------------------------
 
 export default function LoginForm() {
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
 
   const LoginSchema = Yup.object().shape({
@@ -44,7 +46,14 @@ export default function LoginForm() {
     console.log('🚀 ~ onSubmit ~ data', data);
     // navigate('/dashboard', { replace: true });
     const { username, password } = data;
-    await handleLogin(username, password);
+    try {
+      const respData = await handleLogin(username, password);
+      // dispatch(setAdmin(respData));
+      localStorage.setItem('admin', JSON.stringify(respData));
+      navigate('/dashboard/app');
+    } catch (error) {
+      throw error;
+    }
   };
 
   return (

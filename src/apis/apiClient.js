@@ -1,14 +1,16 @@
 import axios from 'axios';
+import jwtDecode from 'jwt-decode';
 import { parse, stringify } from 'qs';
+import authApi from './authApi';
 export const BASE_URL = 'https://becnpmm.vercel.app/api';
 
-const token = localStorage.getItem('accessToken');
+const defaulToken = localStorage.getItem('accessToken');
 const axiosClient = axios.create({
   baseURL: BASE_URL,
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',
-    Authorization: token ? `Bearer ${token}` : null, // 1. Nếu không thì dùng cái 2 cũng được
+    Authorization: defaulToken ? `Bearer ${defaulToken}` : null, // 1. Nếu không thì dùng cái 2 cũng được
   },
   paramsSerializer: {
     encode: parse,
@@ -23,15 +25,38 @@ axiosClient.interceptors.response.use(
     }
     return response;
   },
-  (error) => {
-    if (error.response.status === 401) {
-      console.log('Mày chưa có token');
-      console.log('Cần xử lí gọi status và data từ response ra từ axios.post(refresh token)');
-      console.log('Sau đó check xem status lấy được có phải 200 hay không');
-      console.log('Nếu phải thì set lại token như dòng dưới đây');
-      console.log("axiosClient.defaults.headers.common['Authorization'] = 'Bearer + ${data.accessToken}'");
-      console.log('Sau đó return axios(error.config)');
+  async (error) => {
+    if (error.response.status === 401 || error.response.status === 403) {
+      const refreshToken = localStorage.getItem('refreshToken');
+      const accessToken = localStorage.getItem('accessToken');
+      const decoded_token = jwtDecode(accessToken);
+      if (refreshToken && Math.floor(decoded_token?.exp / 1000) < new Date().getTime()) {
+        const resp = await authApi.refreshToken(refreshToken);
+        const newAccessToken = resp?.data?.accessToken;
+        localStorage.setItem('accessToken', newAccessToken);
+        axiosClient.defaults.headers.common['Authorization'] = `Bearer + ${newAccessToken}` || null;
+        console.log('Reset Token thành công');
+        window.location.reload();
+      }
     }
   }
 );
+// axiosClient.interceptors.request.use(
+//   (config) => {
+//     // axiosClient.defaults.headers.common['Authorization'] = `Bearer + ${token}` || null;
+//     const accessToken = localStorage.getItem('accessToken');
+//     if (!accessToken) {
+//       return {
+//         ...config,
+//         headers: {
+//           ...config.headers,
+//           Authorization: `Bearer + ${accessToken}`,
+//         },
+//       };
+//     }
+//   },
+//   (error) => {
+//     throw error;
+//   }
+// );
 export default axiosClient;
