@@ -1,26 +1,23 @@
 import { filter } from 'lodash';
 import { useState } from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 // material
 import {
   Card,
-  Table,
-  Stack,
-  Avatar,
-  Button,
   Checkbox,
-  TableRow,
+  Container,
+  Stack,
+  Table,
   TableBody,
   TableCell,
-  Container,
-  Typography,
   TableContainer,
   TablePagination,
+  TableRow,
+  Typography,
 } from '@mui/material';
 // components
 import Page from '../components/Page';
 import Scrollbar from '../components/Scrollbar';
-import Iconify from '../components/Iconify';
 import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
 // mock
@@ -153,7 +150,7 @@ export default function Bill() {
       dispatch(getBills(resp?.data));
     };
     handleGetBills();
-  }, []);
+  }, [dispatch]);
   // check access token
   const accessToken = localStorage.getItem('accessToken');
   const naviagate = useNavigate();
@@ -161,7 +158,7 @@ export default function Bill() {
     if (!accessToken) {
       naviagate('/login');
     }
-  }, []);
+  }, [accessToken, naviagate]);
   return (
     <Page title="Bill">
       <Container>

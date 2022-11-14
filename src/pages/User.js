@@ -1,35 +1,32 @@
 import { filter } from 'lodash';
 import { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
 // material
 import {
-  Card,
-  Table,
-  Stack,
   Avatar,
-  Button,
+  Card,
   Checkbox,
-  TableRow,
+  Container,
+  Stack,
+  Table,
   TableBody,
   TableCell,
-  Container,
-  Typography,
   TableContainer,
   TablePagination,
+  TableRow,
+  Typography,
 } from '@mui/material';
 // components
 import Page from '../components/Page';
 import Scrollbar from '../components/Scrollbar';
-import Iconify from '../components/Iconify';
 import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../sections/@dashboard/user';
 // mock
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUsers } from 'src/redux/userSlice';
 import userApi from 'src/apis/userApi';
-import { handleCloseModal } from 'src/redux/modalSlice';
 import ModalProvider from 'src/components/modal/ModalProvider';
+import { handleCloseModal } from 'src/redux/modalSlice';
+import { getUsers } from 'src/redux/userSlice';
 
 // ----------------------------------------------------------------------
 

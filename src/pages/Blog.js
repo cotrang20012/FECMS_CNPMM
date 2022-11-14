@@ -1,10 +1,10 @@
 import { Link as RouterLink } from 'react-router-dom';
 // material
-import { Grid, Button, Container, Stack, Typography } from '@mui/material';
+import { Button, Container, Grid, Stack, Typography } from '@mui/material';
 // components
-import Page from '../components/Page';
 import Iconify from '../components/Iconify';
-import { BlogPostCard, BlogPostsSort, BlogPostsSearch } from '../sections/@dashboard/blog';
+import Page from '../components/Page';
+import { BlogPostCard, BlogPostsSearch, BlogPostsSort } from '../sections/@dashboard/blog';
 // mock
 import POSTS from '../_mock/blog';
 
