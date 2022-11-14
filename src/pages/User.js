@@ -88,12 +88,11 @@ export default function User() {
 
   const { users } = useSelector((state) => state.user);
 
-  console.log('🚀 ~ User ~ users', users);
   const { type: modalType, id: idUser } = useSelector((state) => state.modal);
 
   const dispatch = useDispatch();
-
-  const userList = users.map((user) => ({
+  const filterUser = users.filter((item) => item?.isDeleted === false);
+  const userList = filterUser.map((user) => ({
     id: user?._id,
     name: user?.nickname,
     username: user?.username,
@@ -161,14 +160,38 @@ export default function User() {
   }, [dispatch]);
   const handleDeleteUser = async (id) => {
     try {
+      // Update user when delete
       await userApi.deleteUsers(id);
+      // Reload data
+      const getUserResp = await userApi.getUsers();
+      dispatch(getUsers(getUserResp?.data));
     } catch (error) {
       throw new Error(error);
     }
   };
   const handleBlockUser = async (id) => {
-    console.log('🚀 ~ handleBlockUser ~ id', id);
+    try {
+      // Update user when block
+      await userApi.updateInActive(id);
+      // Reload data
+      const getUserResp = await userApi.getUsers();
+      dispatch(getUsers(getUserResp?.data));
+    } catch (error) {
+      throw new Error(error);
+    }
   };
+  const handleUnBlockUser = async (id) => {
+    try {
+      // Update user when un-block
+      await userApi.updateActive(id);
+      // Reload data
+      const getUserResp = await userApi.getUsers();
+      dispatch(getUsers(getUserResp?.data));
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+
   return (
     <Page title="User">
       <Container>
@@ -199,7 +222,6 @@ export default function User() {
                 <TableBody>
                   {filteredUsers?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
                     const { id, name, status, balance, avatar, email, username } = row;
-                    console.log('🚀 ~ {filteredUsers?.slice ~ id', id);
 
                     const isItemSelected = selected.indexOf(name) !== -1;
 
@@ -246,6 +268,14 @@ export default function User() {
                             id={idUser}
                             content={`Bạn có chắc là khóa người dùng ${idUser} này không ?`}
                             handleClickAccept={() => handleBlockUser(idUser)}
+                          ></ModalProvider>
+                        )}
+                        {modalType === 'unblockuser' && (
+                          <ModalProvider
+                            className="block Modal"
+                            id={idUser}
+                            content={`Bạn có chắc là mở khóa người dùng ${idUser} này không ?`}
+                            handleClickAccept={() => handleUnBlockUser(idUser)}
                           ></ModalProvider>
                         )}
                       </TableRow>

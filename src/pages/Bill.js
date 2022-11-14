@@ -1,6 +1,6 @@
 import { filter } from 'lodash';
 import { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // material
 import {
   Card,
@@ -146,6 +146,7 @@ export default function Bill() {
 
   const isUserNotFound = filteredBills.length === 0;
 
+  // get bill effect
   useEffect(() => {
     const handleGetBills = async () => {
       const resp = await billApi.getBills();
@@ -153,7 +154,14 @@ export default function Bill() {
     };
     handleGetBills();
   }, []);
-
+  // check access token
+  const accessToken = localStorage.getItem('accessToken');
+  const naviagate = useNavigate();
+  useEffect(() => {
+    if (!accessToken) {
+      naviagate('/login');
+    }
+  }, []);
   return (
     <Page title="Bill">
       <Container>

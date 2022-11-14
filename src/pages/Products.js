@@ -1,14 +1,15 @@
 import { useState } from 'react';
 // material
-import { Container, Stack, Typography } from '@mui/material';
+import { Container, Typography } from '@mui/material';
 // components
 import Page from '../components/Page';
-import { ProductSort, ProductList, ProductCartWidget, ProductFilterSidebar } from '../sections/@dashboard/products';
+import { ProductList } from '../sections/@dashboard/products';
 // mock
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import novelApi from 'src/apis/novelsApi';
 import { getNovels } from 'src/redux/novelSlice';
+import { useNavigate } from 'react-router-dom';
 
 // ----------------------------------------------------------------------
 
@@ -38,27 +39,22 @@ export default function EcommerceShop() {
     };
     handleGetNovels();
   }, [dispatch]);
-
+  // check access token
+  const accessToken = localStorage.getItem('accessToken');
+  const naviagate = useNavigate();
+  useEffect(() => {
+    if (!accessToken) {
+      naviagate('/login');
+    }
+  }, []);
   return (
-    <Page title="Dashboard: Products">
+    <Page title="Novels">
       <Container>
         <Typography variant="h4" sx={{ mb: 5 }}>
           Products
         </Typography>
 
-        <Stack direction="row" flexWrap="wrap-reverse" alignItems="center" justifyContent="flex-end" sx={{ mb: 5 }}>
-          <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
-            <ProductFilterSidebar
-              isOpenFilter={openFilter}
-              onOpenFilter={handleOpenFilter}
-              onCloseFilter={handleCloseFilter}
-            />
-            <ProductSort />
-          </Stack>
-        </Stack>
-
         <ProductList products={novelList} />
-        <ProductCartWidget />
       </Container>
     </Page>
   );

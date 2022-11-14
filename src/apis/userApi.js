@@ -9,8 +9,16 @@ class UserApi {
     return axiosClient.get(url);
   };
   getUserById = (userId) => {
-    const url = `user/getuserinfo`;
-    return axiosClient.get(url, { userId });
+    const url = `admin/user/getuserinfo`;
+    return axiosClient.post(url, { userId });
+  };
+  updateActive = (userId) => {
+    const url = `admin/user/active`;
+    return axiosClient.put(url, { userId });
+  };
+  updateInActive = (userId) => {
+    const url = `admin/user/inactive`;
+    return axiosClient.put(url, { userId });
   };
   deleteUsers = (userId) => {
     const url = `admin/user/deleteaccount`;

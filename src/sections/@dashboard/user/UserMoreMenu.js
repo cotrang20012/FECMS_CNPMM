@@ -7,13 +7,25 @@ import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText } from '@mui/mat
 import { handleOpenModal } from 'src/redux/modalSlice';
 // component
 import Iconify from '../../../components/Iconify';
+import { useEffect } from 'react';
+import userApi from 'src/apis/userApi';
 
 // ----------------------------------------------------------------------
 
 export default function UserMoreMenu({ id }) {
+  const [isActive, setActive] = useState(false);
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const handleGetUserById = async () => {
+      const resp = await userApi.getUserById(id);
+      // setActive for each account
+      setActive(resp?.data?.userInfo?.active);
+    };
+    handleGetUserById();
+  }, [id]);
   return (
     <>
       <IconButton ref={ref} onClick={() => setIsOpen(true)}>
@@ -42,21 +54,39 @@ export default function UserMoreMenu({ id }) {
           </ListItemIcon>
           <ListItemText primary="Xóa" primaryTypographyProps={{ variant: 'body2' }} />
         </MenuItem>
+        {isActive && (
+          <MenuItem
+            // component={RouterLink}
+            to="#"
+            sx={{ color: 'text.secondary' }}
+            onClick={() => {
+              dispatch(handleOpenModal({ type: 'blockuser', id }));
+              setIsOpen(false);
+            }}
+          >
+            <ListItemIcon>
+              <Iconify icon="ant-design:lock-filled" width={24} height={24} />
+            </ListItemIcon>
+            <ListItemText primary="Khóa" primaryTypographyProps={{ variant: 'body2' }} />
+          </MenuItem>
+        )}
 
-        <MenuItem
-          // component={RouterLink}
-          to="#"
-          sx={{ color: 'text.secondary' }}
-          onClick={() => {
-            dispatch(handleOpenModal({ type: 'blockuser', id }));
-            setIsOpen(false);
-          }}
-        >
-          <ListItemIcon>
-            <Iconify icon="eva:edit-fill" width={24} height={24} />
-          </ListItemIcon>
-          <ListItemText primary="Khóa" primaryTypographyProps={{ variant: 'body2' }} />
-        </MenuItem>
+        {!isActive && (
+          <MenuItem
+            // component={RouterLink}
+            to="#"
+            sx={{ color: 'text.secondary' }}
+            onClick={() => {
+              dispatch(handleOpenModal({ type: 'unblockuser', id }));
+              setIsOpen(false);
+            }}
+          >
+            <ListItemIcon>
+              <Iconify icon="bx:key" width={24} height={24} />
+            </ListItemIcon>
+            <ListItemText primary="Mở khóa" primaryTypographyProps={{ variant: 'body2' }} />
+          </MenuItem>
+        )}
       </Menu>
     </>
   );
