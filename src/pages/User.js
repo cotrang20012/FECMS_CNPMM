@@ -248,7 +248,7 @@ export default function User() {
                         <TableCell align="left">{status === false ? 'Banned' : 'Active'}</TableCell>
 
                         <TableCell align="right">
-                          <UserMoreMenu id={id} />
+                          <UserMoreMenu id={id} isActive={status} />
                         </TableCell>
                         {modalType === 'deleteuser' && (
                           <ModalProvider

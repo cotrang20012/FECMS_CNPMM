@@ -12,20 +12,11 @@ import userApi from 'src/apis/userApi';
 
 // ----------------------------------------------------------------------
 
-export default function UserMoreMenu({ id }) {
-  const [isActive, setActive] = useState(false);
+export default function UserMoreMenu({ id, isActive }) {
   const ref = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    const handleGetUserById = async () => {
-      const resp = await userApi.getUserById(id);
-      // setActive for each account
-      setActive(resp?.data?.userInfo?.active);
-    };
-    handleGetUserById();
-  }, [id]);
   return (
     <>
       <IconButton ref={ref} onClick={() => setIsOpen(true)}>
