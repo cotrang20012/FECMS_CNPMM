@@ -3,6 +3,7 @@ import jwtDecode from 'jwt-decode';
 import { parse, stringify } from 'qs';
 import authApi from './authApi';
 export const BASE_URL = 'https://becnpmm.vercel.app/api';
+//export const BASE_URL = 'http://localhost:5000/api';
 
 const defaulToken = localStorage.getItem('accessToken');
 const axiosClient = axios.create({
