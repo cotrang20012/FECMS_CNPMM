@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker';
+
 // @mui
 import { Container, Grid, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
@@ -26,11 +27,13 @@ import {
   AppWebsiteVisits,
   AppWidgetSummary,
 } from '../sections/@dashboard/app';
+import { format } from 'date-fns';
 // ----------------------------------------------------------------------
 
 export default function DashboardApp() {
   const theme = useTheme();
   const [totalRevenue, setToalRevenue] = useState(0);
+  const [revenue, setRevenue] = useState([]);
   const { chapterNumber, novelNumber } = useSelector((state) => state.novel);
   const { userNumber, users } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -63,12 +66,28 @@ export default function DashboardApp() {
       const total = resp?.data?.totalRevenue;
       setToalRevenue(total);
     };
+    const handleGetRevenueByDate = async () => {
+      const resp = await billApi.getRevenueByDay();
+      const data = resp?.data;
+      setRevenue(data);
+    };
+    handleGetRevenueByDate();
     handleGetRevenue();
     handleGetBills();
     countAccounts();
     handleCountChapters();
     handleCountNovels();
   }, []);
+  if (revenue) {
+    const dateArray = revenue.map((item) => {
+      return item.dateAdd;
+    });
+    console.log('🚀 ~ dateArray ~ dateArray', dateArray);
+    const amountArray = revenue.map((item) => {
+      return item.amount;
+    });
+    console.log('🚀 ~ dateArray ~ amount', amountArray);
+  }
   return (
     <Page title="Dashboard">
       <Container maxWidth="xl">
@@ -93,42 +112,34 @@ export default function DashboardApp() {
             <AppWidgetSummary title="Tổng doanh thu" total={totalRevenue} color="success" icon={'jam:coin-f'} />
           </Grid>
 
-          {/* <Grid item xs={12} md={6} lg={8}>
+          <Grid item xs={12} md={6} lg={8}>
             <AppWebsiteVisits
-              title="Website Visits"
-              subheader="(+43%) than last year"
-              chartLabels={[
-                '01/01/2003',
-                '02/01/2003',
-                '03/01/2003',
-                '04/01/2003',
-                '05/01/2003',
-                '06/01/2003',
-                '07/01/2003',
-                '08/01/2003',
-                '09/01/2003',
-                '10/01/2003',
-                '11/01/2003',
-              ]}
+              title="Doanh thu theo thời gian"
+              subheader="Tổng hợp doanh thu"
+              chartLabels={revenue.map((item) => {
+                return item.dateAdd;
+              })}
               chartData={[
                 {
-                  name: 'Team A',
-                  type: 'column',
-                  fill: 'solid',
-                  data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30],
-                },
-                {
-                  name: 'Team B',
+                  name: 'Doanh Thu',
                   type: 'area',
                   fill: 'gradient',
-                  data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43],
+                  data: revenue.map((item) => {
+                    return item.amount;
+                  }),
                 },
-                {
-                  name: 'Team C',
-                  type: 'line',
-                  fill: 'solid',
-                  data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39],
-                },
+                // {
+                //   name: 'Team B',
+                //   type: 'area',
+                //   fill: 'gradient',
+                //   data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43],
+                // },
+                // {
+                //   name: 'Team C',
+                //   type: 'line',
+                //   fill: 'solid',
+                //   data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39],
+                // },
               ]}
             />
           </Grid>
@@ -253,7 +264,7 @@ export default function DashboardApp() {
                 { id: '5', label: 'Sprint Showcase' },
               ]}
             />
-          </Grid> */}
+          </Grid>
         </Grid>
       </Container>
     </Page>
