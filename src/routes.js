@@ -10,6 +10,7 @@ import Register from './pages/Register';
 import Products from './pages/Products';
 import DashboardApp from './pages/DashboardApp';
 import Bill from './pages/Bill';
+import Traffic from './pages/Traffic/Traffic';
 
 // ----------------------------------------------------------------------
 export default function Router() {
@@ -22,6 +23,7 @@ export default function Router() {
         { path: 'user', element: <User /> },
         { path: 'bill', element: <Bill /> },
         { path: 'novels', element: <Products /> },
+        { path: 'traffics', element: <Traffic /> },
       ],
     },
     {
