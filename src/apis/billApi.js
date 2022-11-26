@@ -9,6 +9,10 @@ class BillApi {
     const url = '/statistic/sumTotalRevenue';
     return axiosClient.get(url);
   };
+  getRevenueByDay = () => {
+    const url = `/statistic/bills/getTotalRevenueByDay`;
+    return axiosClient.get(url);
+  };
 }
 
 const billApi = new BillApi();
