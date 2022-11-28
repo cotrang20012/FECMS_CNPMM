@@ -11,6 +11,7 @@ import Products from './pages/Products';
 import DashboardApp from './pages/DashboardApp';
 import Bill from './pages/Bill';
 import Traffic from './pages/Traffic/Traffic';
+import NovelDetails from './pages/NovelDetails';
 
 // ----------------------------------------------------------------------
 export default function Router() {
@@ -22,7 +23,15 @@ export default function Router() {
         { path: 'app', element: <DashboardApp /> },
         { path: 'user', element: <User /> },
         { path: 'bill', element: <Bill /> },
-        { path: 'novels', element: <Products /> },
+        {
+          path: 'novels',
+          element: <Products />,
+          children: [],
+        },
+        {
+          path: 'novels/:id',
+          element: <NovelDetails />,
+        },
         { path: 'traffics', element: <Traffic /> },
       ],
     },
