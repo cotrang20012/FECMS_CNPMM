@@ -7,7 +7,8 @@ import { styled } from '@mui/material/styles';
 // components
 import Label from '../../../components/Label';
 import Iconify from 'src/components/Iconify';
-
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 // ----------------------------------------------------------------------
 
 const ProductImgStyle = styled('img')({
@@ -25,9 +26,26 @@ ShopProductCard.propTypes = {
 };
 
 export default function ShopProductCard({ product }) {
+  // navigate
+  const navigate = useNavigate();
   // const { name, cover, status } = product;
-  const { id, author, genre, name, image, status } = product;
+  const [rating, setRating] = useState(0);
+  const { id, author, genre, name, image, status, ratings, comments } = product;
 
+  // Tính số đánh giá trung bình
+  useEffect(() => {
+    if (ratings.length > 0) {
+      const mediumScore =
+        ratings.reduce((sum, curVal) => {
+          return sum + +curVal.rating;
+        }, 0) / ratings.length;
+      setRating(mediumScore.toFixed(2));
+    }
+  });
+  // Navigate Page
+  const navigateToDetail = () => {
+    navigate(`${id}`);
+  };
   return (
     <Card>
       <Box sx={{ pt: '100%', position: 'relative' }}>
@@ -63,6 +81,9 @@ export default function ShopProductCard({ product }) {
 
           <Typography variant="subtitle1">{author}</Typography>
           <Typography variant="subtitle1">{genre}</Typography>
+        </Stack>
+        <Stack direction="row" alignItems="center" justifyContent="space-between">
+          <Typography variant="subtitle1">{rating || 0}</Typography>
         </Stack>
       </Stack>
     </Card>

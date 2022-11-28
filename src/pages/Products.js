@@ -23,6 +23,8 @@ export default function EcommerceShop() {
     name: novel?.name,
     image: novel?.image,
     status: novel?.state,
+    comments: novel?.comments,
+    ratings: novel?.ratings,
   }));
   const dispatch = useDispatch();
   const handleOpenFilter = () => {
@@ -32,9 +34,10 @@ export default function EcommerceShop() {
   const handleCloseFilter = () => {
     setOpenFilter(false);
   };
+
   useEffect(() => {
     const handleGetNovels = async () => {
-      const resp = await novelApi.getNovels();
+      const resp = await novelApi.getNovelReview();
       dispatch(getNovels(resp?.data));
     };
     handleGetNovels();
