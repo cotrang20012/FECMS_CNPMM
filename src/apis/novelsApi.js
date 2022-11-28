@@ -13,6 +13,10 @@ class NovelApi {
     const url = `/admin/novel/getnovels`;
     return axiosClient.get(url);
   };
+  getNovelReview = () => {
+    const url = `/admin/novel/getnovelreview`;
+    return axiosClient.get(url);
+  };
   deleteNovels = (novelId) => {
     const url = `/admin/novel/deletenovel`;
     return axiosClient.post(url, { novelId });
