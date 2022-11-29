@@ -10,6 +10,7 @@ import { useEffect } from 'react';
 import novelApi from 'src/apis/novelsApi';
 import { getNovels } from 'src/redux/novelSlice';
 import { useNavigate } from 'react-router-dom';
+import { NoPhotography } from '@mui/icons-material';
 
 // ----------------------------------------------------------------------
 
@@ -23,9 +24,12 @@ export default function EcommerceShop() {
     name: novel?.name,
     image: novel?.image,
     status: novel?.state,
+    rating: novel?.rating,
+    url: novel?.url,
     comments: novel?.comments,
     ratings: novel?.ratings,
   }));
+
   const dispatch = useDispatch();
   const handleOpenFilter = () => {
     setOpenFilter(true);

@@ -28,23 +28,12 @@ ShopProductCard.propTypes = {
 export default function ShopProductCard({ product }) {
   // navigate
   const navigate = useNavigate();
-  // const { name, cover, status } = product;
-  const [rating, setRating] = useState(0);
-  const { id, author, genre, name, image, status, ratings, comments } = product;
 
-  // Tính số đánh giá trung bình
-  useEffect(() => {
-    if (ratings.length > 0) {
-      const mediumScore =
-        ratings.reduce((sum, curVal) => {
-          return sum + +curVal.rating;
-        }, 0) / ratings.length;
-      setRating(mediumScore.toFixed(2));
-    }
-  });
+  const { id, author, genre, name, image, status, ratings, rating, url } = product;
+
   // Navigate Page
   const navigateToDetail = () => {
-    navigate(`${id}`);
+    navigate(`${url}`);
   };
   return (
     <Card>
@@ -64,16 +53,16 @@ export default function ShopProductCard({ product }) {
             {status}
           </Label>
         )}
-        <ProductImgStyle alt={name} src={image} />
+        <ProductImgStyle alt={name} src={image} onClick={navigateToDetail} style={{ cursor: 'pointer' }} />
       </Box>
 
       <Stack spacing={2} sx={{ p: 3 }}>
         <Stack direction="row" justifyContent="space-between" alignItems="center">
-          <Typography className="" variant="subtitle2" style={nameStoryStyled} noWrap>
+          <Typography className="" variant="subtitle2" style={nameStoryStyled} onClick={navigateToDetail} noWrap>
             {name}
           </Typography>
           <IconButton>
-            <Iconify icon="eva:more-horizontal-fill" width={20} height={20} />
+            <Iconify icon="material-symbols:view-in-ar-sharp" width={20} height={20} onClick={navigateToDetail} />
           </IconButton>
         </Stack>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
@@ -83,7 +72,7 @@ export default function ShopProductCard({ product }) {
           <Typography variant="subtitle1">{genre}</Typography>
         </Stack>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
-          <Typography variant="subtitle1">{rating || 0}</Typography>
+          <Typography variant="subtitle1">{rating.toFixed(2) + ' ⭐' || 0}</Typography>
         </Stack>
       </Stack>
     </Card>
@@ -97,4 +86,5 @@ const nameStoryStyled = {
   overflow: 'hidden',
   OTextOverflow: 'ellipsis',
   textOverflow: 'ellipsis',
+  cursor: 'pointer',
 };

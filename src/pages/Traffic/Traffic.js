@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import trafficApi from 'src/apis/trafficApi';
 import { setTraffics } from 'src/redux/trafficSlice';
 import BarChartPoint from './BarChartPoint';
-import moment from 'moment'
+import moment from 'moment';
 
 // ----------------------------------------------------------------------
 
@@ -20,8 +20,8 @@ export default function Traffic() {
   const [openFilter, setOpenFilter] = useState(false);
   const { traffics } = useSelector((state) => state.traffic);
   const trafficList = traffics.map((traffic) => ({
-    label: moment(traffic?.date).toISOString().substring(0,10),
-    count:traffic?.count
+    label: moment(traffic?.date).toISOString().substring(0, 10),
+    count: traffic?.count,
   }));
   const dispatch = useDispatch();
   const handleOpenFilter = () => {

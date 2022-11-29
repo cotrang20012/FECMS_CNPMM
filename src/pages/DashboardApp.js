@@ -78,16 +78,16 @@ export default function DashboardApp() {
     handleCountChapters();
     handleCountNovels();
   }, []);
-  if (revenue) {
-    const dateArray = revenue.map((item) => {
-      return item.dateAdd;
-    });
-    console.log('🚀 ~ dateArray ~ dateArray', dateArray);
-    const amountArray = revenue.map((item) => {
-      return item.amount;
-    });
-    console.log('🚀 ~ dateArray ~ amount', amountArray);
-  }
+  // if (revenue) {
+  //   const dateArray = revenue.map((item) => {
+  //     return item.dateAdd;
+  //   });
+  //   console.log('🚀 ~ dateArray ~ dateArray', dateArray);
+  //   const amountArray = revenue.map((item) => {
+  //     return item.amount;
+  //   });
+  //   console.log('🚀 ~ dateArray ~ amount', amountArray);
+  // }
   return (
     <Page title="Dashboard">
       <Container maxWidth="xl">
@@ -112,7 +112,7 @@ export default function DashboardApp() {
             <AppWidgetSummary title="Tổng doanh thu" total={totalRevenue} color="success" icon={'jam:coin-f'} />
           </Grid>
 
-          <Grid item xs={12} md={6} lg={8}>
+          <Grid item xs={12} md={6} lg={12}>
             <AppWebsiteVisits
               title="Doanh thu theo thời gian"
               subheader="Tổng hợp doanh thu"
@@ -143,8 +143,39 @@ export default function DashboardApp() {
               ]}
             />
           </Grid>
+          <Grid item xs={12} md={6} lg={12}>
+            <AppWebsiteVisits
+              title="Doanh thu theo thời gian"
+              subheader="Tổng hợp doanh thu"
+              chartLabels={revenue.map((item) => {
+                return item.dateAdd;
+              })}
+              chartData={[
+                {
+                  name: 'Doanh Thu',
+                  type: 'bar',
+                  fill: 'line',
+                  data: revenue.map((item) => {
+                    return item.amount;
+                  }),
+                },
+                // {
+                //   name: 'Team B',
+                //   type: 'area',
+                //   fill: 'gradient',
+                //   data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43],
+                // },
+                // {
+                //   name: 'Team C',
+                //   type: 'line',
+                //   fill: 'solid',
+                //   data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39],
+                // },
+              ]}
+            />
+          </Grid>
 
-          <Grid item xs={12} md={6} lg={4}>
+          {/* <Grid item xs={12} md={6} lg={4}>
             <AppCurrentVisits
               title="Current Visits"
               chartData={[
@@ -179,9 +210,9 @@ export default function DashboardApp() {
                 { label: 'United Kingdom', value: 1380 },
               ]}
             />
-          </Grid>
+          </Grid> */}
 
-          <Grid item xs={12} md={6} lg={4}>
+          {/* <Grid item xs={12} md={6} lg={4}>
             <AppCurrentSubject
               title="Current Subject"
               chartLabels={['English', 'History', 'Physics', 'Geography', 'Chinese', 'Math']}
@@ -205,9 +236,9 @@ export default function DashboardApp() {
                 postedAt: faker.date.recent(),
               }))}
             />
-          </Grid>
+          </Grid> */}
 
-          <Grid item xs={12} md={6} lg={4}>
+          {/* <Grid item xs={12} md={6} lg={4}>
             <AppOrderTimeline
               title="Order Timeline"
               list={[...Array(5)].map((_, index) => ({
@@ -223,9 +254,9 @@ export default function DashboardApp() {
                 time: faker.date.past(),
               }))}
             />
-          </Grid>
+          </Grid> */}
 
-          <Grid item xs={12} md={6} lg={4}>
+          {/* <Grid item xs={12} md={6} lg={4}>
             <AppTrafficBySite
               title="Traffic by Site"
               list={[
@@ -251,9 +282,9 @@ export default function DashboardApp() {
                 },
               ]}
             />
-          </Grid>
+          </Grid> */}
 
-          <Grid item xs={12} md={6} lg={8}>
+          {/* <Grid item xs={12} md={6} lg={8}>
             <AppTasks
               title="Tasks"
               list={[
@@ -264,7 +295,7 @@ export default function DashboardApp() {
                 { id: '5', label: 'Sprint Showcase' },
               ]}
             />
-          </Grid>
+          </Grid> */}
         </Grid>
       </Container>
     </Page>

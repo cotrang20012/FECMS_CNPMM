@@ -5,6 +5,10 @@ class CommentApi {
     const url = `/admin/comment/getlistcomments`;
     return axiosClient.get(url);
   };
+  deleteComment = (id) => {
+    const url = `/admin/comment/deletecomment?id=${id}`;
+    return axiosClient.get(url);
+  };
 }
 
 const commentApi = new CommentApi();

@@ -5,6 +5,10 @@ class RatingApi {
     const url = '/admin/rating/getlistratings';
     return axiosClient.get(url);
   };
+  deleteRating = (id) => {
+    const url = `/admin/rating/deleterating?id=${id}`;
+    return axiosClient.get(url);
+  };
 }
 
 const ratingApi = new RatingApi();
