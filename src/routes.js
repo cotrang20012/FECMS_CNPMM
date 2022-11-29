@@ -29,7 +29,7 @@ export default function Router() {
           children: [],
         },
         {
-          path: 'novels/:id',
+          path: 'novels/:url',
           element: <NovelDetails />,
         },
         { path: 'traffics', element: <Traffic /> },
