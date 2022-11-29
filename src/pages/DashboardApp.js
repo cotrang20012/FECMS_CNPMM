@@ -28,12 +28,15 @@ import {
   AppWidgetSummary,
 } from '../sections/@dashboard/app';
 import { format } from 'date-fns';
+import trafficApi from 'src/apis/trafficApi';
+import AppTrafficVisits from 'src/sections/@dashboard/app/AppTrafficVisits';
 // ----------------------------------------------------------------------
 
 export default function DashboardApp() {
   const theme = useTheme();
   const [totalRevenue, setToalRevenue] = useState(0);
   const [revenue, setRevenue] = useState([]);
+  const [traffic, setTraffic] = useState([]);
   const { chapterNumber, novelNumber } = useSelector((state) => state.novel);
   const { userNumber, users } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -71,12 +74,18 @@ export default function DashboardApp() {
       const data = resp?.data;
       setRevenue(data);
     };
+    const handleGetTraffic = async () => {
+      const resp = await trafficApi.getAllTraffic();
+      const data = resp?.data?.traffics;
+      setTraffic(data);
+    };
     handleGetRevenueByDate();
     handleGetRevenue();
     handleGetBills();
     countAccounts();
     handleCountChapters();
     handleCountNovels();
+    handleGetTraffic();
   }, []);
   // if (revenue) {
   //   const dateArray = revenue.map((item) => {
@@ -144,19 +153,19 @@ export default function DashboardApp() {
             />
           </Grid>
           <Grid item xs={12} md={6} lg={12}>
-            <AppWebsiteVisits
-              title="Doanh thu theo thời gian"
-              subheader="Tổng hợp doanh thu"
-              chartLabels={revenue.map((item) => {
-                return item.dateAdd;
+            <AppTrafficVisits
+              title="Dữ liệu truy cập theo thời gian"
+              subheader="Tổng số truy cập"
+              chartLabels={traffic.map((item) => {
+                return new Date(item.date).toLocaleDateString();
               })}
               chartData={[
                 {
-                  name: 'Doanh Thu',
+                  name: 'Số truy cập',
                   type: 'bar',
                   fill: 'line',
-                  data: revenue.map((item) => {
-                    return item.amount;
+                  data: traffic.map((item) => {
+                    return item.count;
                   }),
                 },
                 // {
