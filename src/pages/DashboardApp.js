@@ -157,7 +157,8 @@ export default function DashboardApp() {
               title="Dữ liệu truy cập theo thời gian"
               subheader="Tổng số truy cập"
               chartLabels={traffic.map((item) => {
-                return new Date(item.date).toLocaleDateString();
+                const date = format(new Date(item.date.substring(0, 10)), 'yyyy-MM-dd');
+                return date;
               })}
               chartData={[
                 {
